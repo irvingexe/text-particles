@@ -1,0 +1,194 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;400;500;600&display=swap");
+
+* {
+  font-family: "Inter", sans-serif;
+}
+
+body {
+  background: #1e251d;
+}
+
+.App {
+  position: relative;
+  height: 100vh;
+}
+
+.sketch {
+  position: fixed;
+  filter: blur(0.3px);
+}
+
+.header {
+  position: absolute;
+  top: 7.5vmin;
+  right: 4vmin;
+  display: flex;
+  gap: 1rem;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.header:before {
+  content: "";
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: #fff;
+  filter: blur(8px);
+  opacity: 0.85;
+}
+
+.header:after {
+  content: "";
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgb(216, 216, 216);
+  border-radius: 1px;
+  /*filter: blur(30px);*/
+  opacity: 0.6;
+}
+
+.header > div {
+  padding: 0.5rem 1rem;
+  z-index: 1;
+  cursor: pointer;
+}
+
+.logo {
+  position: absolute;
+  left: 11vmin;
+  top: 5vmin;
+  cursor: pointer;
+  width: 50px;
+  display: flex;
+  padding: 10px;
+}
+
+.logo:before {
+  content: "";
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: #fff;
+  filter: blur(8px);
+  border-radius: 50%;
+  opacity: 0.85;
+}
+
+.logo img {
+  width: 100%;
+  z-index: 1;
+}
+
+.welcome {
+  position: absolute;
+  top: 15vmin;
+  left: 10vmin;
+  /*
+  text-align: center;
+  left: 50vw;
+  top: 50vh;
+  transform: translate(-50%, -50%);
+  */
+  padding: 0.5rem;
+  font-size: 130px;
+  margin: 0;
+  font-weight: bold;
+  text-transform: uppercase;
+  width: 90vw;
+  font-weight: 600;
+}
+
+.welcome > :nth-child(2) {
+  text-align: right;
+  padding-right: 20vw;
+}
+
+.welcome :nth-child(4) {
+  font-weight: 100;
+  font-style: italic;
+  display: flex;
+  gap: 5rem;
+  width: min-content;
+  align-items: center;
+  margin: auto;
+}
+
+.welcome :nth-child(4) :nth-child(2) {
+  font-size: 30px;
+  font-weight: 400;
+  text-transform: lowercase;
+  text-align: left;
+  width: max-content;
+}
+
+.bg-logo-container {
+  position: absolute;
+  width: 80vmin;
+  height: 80vmin;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  padding: 20px;
+}
+
+.bg-logo-container:before {
+  content: "";
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: #fff;
+  filter: blur(40px);
+  border-radius: 50%;
+  z-index: -1;
+  opacity: 0.93;
+}
+
+.bg-logo-container > div {
+  opacity: 0.7;
+}
+
+.bg-logo-blur,
+.bg-logo {
+  position: absolute;
+  width: 100%;
+  z-index: 1;
+}
+
+.bg-logo-blur {
+  filter: blur(22px);
+  opacity: 0.7;
+}
+
+.bg-logo {
+  filter: blur(4.5px);
+  mask-image: url(circle.svg);
+  mask-position: 30% 40%;
+  mask-size: 77% 77%;
+  mask-repeat: no-repeat;
+  opacity: 0.5;
+  animation: asdf 6s alternate infinite ease-in-out;
+}
+
+@keyframes asdf {
+  100% {
+    mask-position: 190px 120px;
+  }
+}
+
+.App > div:not(.sketch) {
+  display: none;
+}
