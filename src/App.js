@@ -21,7 +21,7 @@ function App() {
 
   const stopMoving = debounce(() => {
     if (isMouseMoving) setMouseMoving(false);
-  }, 100 * 4);
+  }, 150);
 
   const handleMouseMove = (e) => {
     document.querySelector(

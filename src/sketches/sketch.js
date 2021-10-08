@@ -27,6 +27,8 @@ export default function sketch(p) {
   let difference;
   let alpha;
   let letter;
+  let scaleIntensity = 0;
+  let scaleCount = 0;
 
   p.setup = () => {
     canvas = p.createCanvas(p.windowWidth, p.windowHeight);
@@ -73,6 +75,22 @@ export default function sketch(p) {
     } else {
       radius = 200;
       waveTickness = 500;
+      if (isMouseMoving) {
+        scaleIntensity =
+          scaleIntensity < 1
+            ? scaleIntensity < 0
+              ? 0
+              : scaleIntensity + 0.1
+            : 1;
+        scaleCount = scaleIntensity;
+      } else {
+        if (scaleIntensity > 0) {
+          scaleCount = scaleCount - 0.15;
+          scaleIntensity = Math.pow(1.5, scaleCount) / 1.5;
+        } else {
+          scaleIntensity = 0;
+        }
+      }
     }
 
     for (var i = 0; i < locs.length; i++) {
@@ -80,7 +98,7 @@ export default function sketch(p) {
       letter = letter > text.length - 1 ? 0 : letter + 1;
       isFocused = false;
       focusCenter = false;
-      alpha = locs[i][0].z ? 255 : 25; //change
+      alpha = locs[i][0].z ? 255 : 255; //change
 
       p.push();
       p.translate(locs[i][0].x, locs[i][0].y);
@@ -99,9 +117,11 @@ export default function sketch(p) {
           1 + 0.003 * (waveTickness - (distance - (radius - waveTickness)));
 
         //change
+        /*
         alpha = locs[i][0].z
           ? 255
           : 25 + 0.003 * (waveTickness - (distance - (radius - waveTickness)));
+          */
       } else {
         for (const j in mouseTrail) {
           distance = Math.sqrt(
@@ -145,22 +165,25 @@ export default function sketch(p) {
               x:
                 (x - Math.abs(difference.x)) *
                 (difference.x / Math.abs(difference.x)) *
-                ((radius - distance) / radius),
+                ((radius - distance) / radius) *
+                scaleIntensity,
               y:
                 (y - Math.abs(difference.y)) *
                 (difference.y / Math.abs(difference.y)) *
-                ((radius - distance) / radius),
+                ((radius - distance) / radius) *
+                scaleIntensity,
             };
 
             scale =
               1 +
               (j + 4) *
                 (focusCenter ? 0.013 : 0.025) *
-                ((radius - distance) / radius);
+                ((radius - distance) / radius) *
+                (isMouseMoving ? 1 : scaleIntensity);
 
             alpha = locs[i][0].z
               ? 255
-              : 25 + j * 100 * ((radius - distance) / radius); //change
+              : 255 + j * 100 * ((radius - distance) / radius); //change
           }
         }
       }
@@ -168,13 +191,13 @@ export default function sketch(p) {
       p.fill(color);
 
       if (isFocused) {
-        color.setAlpha(isWave && !locs[i][0].z ? 80 : alpha);
+        color.setAlpha(isWave && !locs[i][0].z ? 255 : alpha); //change
         if (focusCenter) {
           //p.translate(translate.x, translate.y);
           for (let j = mouseTrail.length - 1; j >= 0; j--) {
             if (
               symbolCounter %
-                (isMouseMoving ? (j < mouseTrail.length - 1 ? 70 : 7) : 14) ===
+                (isMouseMoving ? (j < mouseTrail.length - 1 ? 70 : 7) : 10) ===
               0
             ) {
               //console.log(i, j);
@@ -225,29 +248,6 @@ export default function sketch(p) {
       }, symbolsSpeed);
     } else {
       symbolsSpeed = 100;
-    }
-  };
-
-  p.myCustomRedrawAccordingToNewPropsHandler = (newProps) => {
-    if (canvas) {
-      //Make sure the canvas has been created
-      isMouseMoving = newProps.isMouseMoving;
-      if (!isMouseMoving) {
-        setSymbolsSpeed(0);
-        setTimeout(() => {
-          mouseMoveEcho = false;
-        }, 1000);
-      } else {
-        symbolsSpeed = 100;
-        mouseMoveEcho = true;
-      }
-
-      isWave = newProps.isWave;
-      if (!isWave) {
-        setTimeout(() => {
-          mouseMoveEcho = false;
-        }, 200);
-      }
     }
   };
 
@@ -307,5 +307,28 @@ export default function sketch(p) {
       }
       setMouseTrace();
     }, 30);
+  };
+
+  p.myCustomRedrawAccordingToNewPropsHandler = (newProps) => {
+    if (canvas) {
+      //Make sure the canvas has been created
+      isMouseMoving = newProps.isMouseMoving;
+      if (!isMouseMoving) {
+        setSymbolsSpeed(0);
+        setTimeout(() => {
+          mouseMoveEcho = false;
+        }, 1000);
+      } else {
+        symbolsSpeed = 100;
+        mouseMoveEcho = true;
+      }
+
+      isWave = newProps.isWave;
+      if (!isWave) {
+        setTimeout(() => {
+          mouseMoveEcho = false;
+        }, 200);
+      }
+    }
   };
 }
